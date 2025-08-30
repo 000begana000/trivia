@@ -1,13 +1,34 @@
+import { useState, useRef } from "react";
+
 import Button from "./UI/Button";
 
 export default function Login() {
-  return (
-    <div>
-      <p>Please enter player name</p>
-      <div>
-        <input type="text" name="" id="" />
-        <Button>save</Button>
-      </div>
-    </div>
-  );
+  const [enteredPlayerName, setEnteredPlayerName] = useState("");
+
+  const playerName = useRef();
+
+  // save player name
+  function handleSavePlayerName() {
+    setEnteredPlayerName(playerName.current.value);
+    console.log(enteredPlayerName);
+    playerName.current.value = "";
+  }
+
+  let login;
+
+  if (!enteredPlayerName) {
+    login = (
+      <>
+        <p>Please enter player name</p>
+        <div>
+          <input type="text" name="" id="" ref={playerName} />
+          <Button onClick={handleSavePlayerName}>save</Button>
+        </div>
+      </>
+    );
+  } else {
+    login = <p>Hello, {enteredPlayerName}! please choose a category</p>;
+  }
+
+  return <div>{login}</div>;
 }
