@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 
 import Button from "./UI/Button";
+import Categories from "./Categories";
 
 export default function Login() {
   const [enteredPlayerName, setEnteredPlayerName] = useState("");
@@ -27,7 +28,12 @@ export default function Login() {
       </>
     );
   } else {
-    login = <p>Hello, {enteredPlayerName}! please choose a category</p>;
+    login = (
+      <>
+        <p>Hello, {enteredPlayerName}! please choose a category</p>
+        <Categories />
+      </>
+    );
   }
 
   return <div>{login}</div>;
