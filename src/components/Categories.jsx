@@ -1,24 +1,25 @@
+import { useState, useEffect } from "react";
+
 import Button from "./UI/Button";
 
-const CATEGORIES = [
-  "all category",
-  "television",
-  "music",
-  "science",
-  "sports",
-  "geography",
-  "history",
-  "art",
-  "animals",
-  "film",
-];
-
 export default function Categories() {
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    fetch("https://opentdb.com/api_category.php")
+      .then(respones => {
+        return respones.json();
+      })
+      .then(resData => {
+        setCategories(resData.trivia_categories);
+      });
+  }, []);
+
   return (
     <ul>
-      {CATEGORIES.map(category => (
-        <li key={category}>
-          <Button>{category}</Button>
+      {categories.map(category => (
+        <li key={category.id}>
+          <Button>{category.name}</Button>
         </li>
       ))}
     </ul>
