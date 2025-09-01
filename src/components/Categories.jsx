@@ -1,9 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+
+import { QuizContext } from "../store/quiz-context";
 
 import Button from "./UI/Button";
 
 export default function Categories() {
   const [categories, setCategories] = useState([]);
+
+  const quizCtx = useContext(QuizContext);
+
+  function handleSelectCategoryCode(codeNum) {
+    quizCtx.selectCategoryCode(codeNum);
+  }
 
   useEffect(() => {
     fetch("https://opentdb.com/api_category.php")
@@ -19,7 +27,9 @@ export default function Categories() {
     <ul>
       {categories.map(category => (
         <li key={category.id}>
-          <Button>{category.name}</Button>
+          <Button onClick={() => handleSelectCategoryCode(category.id)}>
+            {category.name}
+          </Button>
         </li>
       ))}
     </ul>
