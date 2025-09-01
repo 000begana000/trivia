@@ -1,14 +1,14 @@
 import Header from "./components/Header";
-import Login from "./components/Login";
+import MainContent from "./components/MainContent";
 
-import { QuizContext } from "./store/quiz-context";
+import QuizContextProvider from "./store/quiz-context";
 
 function App() {
   return (
-    <QuizContext.Provider>
+    <QuizContextProvider>
       <Header />
-      <Login />
-    </QuizContext.Provider>
+      <MainContent />
+    </QuizContextProvider>
   );
 }
 
