@@ -4,7 +4,9 @@ import { QuizContext } from "../store/quiz-context";
 import { decodeHTML } from "../store/htmlDecoder";
 
 export default function Game() {
-  const { quizItems } = useContext(QuizContext);
+  const { isFetching, quizItems } = useContext(QuizContext);
+
+  console.log(quizItems);
 
   return (
     <div>
@@ -12,10 +14,12 @@ export default function Game() {
       <p>current score</p>
       <p>high score</p>
       <ul>
-        {quizItems.map(item => {
-          const decodedString = decodeHTML(item.question);
-          return <li key={item.question}>{decodedString}</li>;
-        })}
+        {isFetching && <p>Loading...</p>}
+        {!isFetching &&
+          quizItems.map(item => {
+            const decodedString = decodeHTML(item.question);
+            return <li key={item.question}>{decodedString}</li>;
+          })}
       </ul>
     </div>
   );
