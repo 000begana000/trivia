@@ -1,11 +1,10 @@
 import { useContext } from "react";
 
 import { QuizContext } from "../store/quiz-context";
+import { decodeHTML } from "../store/htmlDecoder";
 
 export default function Game() {
   const { quizItems } = useContext(QuizContext);
-
-  console.log(quizItems);
 
   return (
     <div>
@@ -14,7 +13,8 @@ export default function Game() {
       <p>high score</p>
       <ul>
         {quizItems.map(item => {
-          return <li key={item.question}>{item.question}</li>;
+          const decodedString = decodeHTML(item.question);
+          return <li key={item.question}>{decodedString}</li>;
         })}
       </ul>
     </div>
