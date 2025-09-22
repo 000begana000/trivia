@@ -21,10 +21,20 @@ export default function Login() {
     login = (
       <>
         <p>Please enter player name</p>
-        <div>
-          <input type="text" name="" id="" ref={playerName} />
+        <form>
+          <input
+            type="text"
+            name=""
+            id=""
+            ref={playerName}
+            required
+            minLength={5}
+            onInvalid={e =>
+              e.target.setCustomValidity("Player name is required.")
+            }
+          />
           <Button onClick={handleSavePlayerName}>save</Button>
-        </div>
+        </form>
       </>
     );
   } else {
