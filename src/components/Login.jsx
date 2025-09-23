@@ -1,50 +1,38 @@
-import { useState, useRef } from "react";
+import { useRef, useContext } from "react";
+
+import { QuizContext } from "../store/quiz-context";
 
 import Button from "./UI/Button";
-import Categories from "./Categories";
 
 export default function Login() {
-  const [enteredPlayerName, setEnteredPlayerName] = useState("");
+  const quizCtx = useContext(QuizContext);
 
   const playerName = useRef();
 
   // save player name
   function handleSavePlayerName() {
-    setEnteredPlayerName(playerName.current.value);
+    quizCtx.savePlayerName(playerName.current.value);
     console.log(enteredPlayerName);
     playerName.current.value = "";
   }
 
-  let login;
-
-  if (!enteredPlayerName) {
-    login = (
-      <>
-        <p>Please enter player name</p>
-        <form>
-          <input
-            type="text"
-            name=""
-            id=""
-            ref={playerName}
-            required
-            minLength={5}
-            onInvalid={e =>
-              e.target.setCustomValidity("Player name is required.")
-            }
-          />
-          <Button onClick={handleSavePlayerName}>save</Button>
-        </form>
-      </>
-    );
-  } else {
-    login = (
-      <>
-        <p>Hello, {enteredPlayerName}! please choose a category</p>
-        <Categories />
-      </>
-    );
-  }
-
-  return <div>{login}</div>;
+  return (
+    <div>
+      <p>Please enter player name</p>
+      <form>
+        <input
+          type="text"
+          name=""
+          id=""
+          ref={playerName}
+          required
+          minLength={5}
+          onInvalid={e =>
+            e.target.setCustomValidity("Player name is required.")
+          }
+        />
+        <Button onClick={handleSavePlayerName}>save</Button>
+      </form>
+    </div>
+  );
 }
