@@ -3,10 +3,20 @@ import { useContext } from "react";
 import { QuizContext } from "../store/quiz-context";
 import { decodeHTML } from "../store/htmlDecoder";
 
-export default function Game() {
-  const { isFetching, quizItems } = useContext(QuizContext);
+import Button from "./UI/Button";
 
-  console.log(quizItems);
+export default function Game() {
+  const { isFetching, quizItems, userAnswers, setUserAnswers } =
+    useContext(QuizContext);
+
+  const activeQuestionIndex = userAnswers.length;
+  console.log(activeQuestionIndex);
+
+  function handleSetUserAnswers(selectedAsnwer) {
+    setUserAnswers(prevAnswers => {
+      return [...prevAnswers, selectedAsnwer];
+    });
+  }
 
   return (
     <div>
@@ -15,11 +25,19 @@ export default function Game() {
       <p>high score</p>
       <ul>
         {isFetching && <p>Loading...</p>}
-        {!isFetching &&
-          quizItems.map(item => {
-            const decodedString = decodeHTML(item.question);
-            return <li key={item.question}>{decodedString}</li>;
-          })}
+        <li>
+          {!isFetching && quizItems.length > 0 && (
+            <p>{quizItems[activeQuestionIndex].question}</p>
+          )}
+        </li>
+        <li>
+          <p>
+            <Button onClick={() => handleSetUserAnswers("True")}>True</Button>
+          </p>
+          <p>
+            <Button onClick={() => handleSetUserAnswers("False")}>False</Button>
+          </p>
+        </li>
       </ul>
     </div>
   );
