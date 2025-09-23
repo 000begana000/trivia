@@ -18,20 +18,30 @@ const CATEGORIES = [
 
 export default function Categories() {
   const quizCtx = useContext(QuizContext);
+  const playerName = quizCtx.enteredPlayerName;
+  let categoryId;
 
-  function handleSelectCategoryCode(codeNum) {
-    quizCtx.selectCategoryCode(codeNum);
+  function handleSelectCategoryId(selectedCategoryId) {
+    categoryId = selectedCategoryId;
+  }
+
+  function handleStartGame() {
+    quizCtx.startGame(categoryId);
   }
 
   return (
-    <ul>
-      {CATEGORIES.map(category => (
-        <li key={category.id}>
-          <Button onClick={() => handleSelectCategoryCode(category.id)}>
-            {category.name}
-          </Button>
-        </li>
-      ))}
-    </ul>
+    <>
+      <p>Welcome, {playerName}!</p>
+      <ul>
+        {CATEGORIES.map(category => (
+          <li key={category.id}>
+            <Button onClick={() => handleSelectCategoryId(category.id)}>
+              {category.name}
+            </Button>
+          </li>
+        ))}
+      </ul>
+      <Button onClick={handleStartGame}>Start new game</Button>
+    </>
   );
 }
