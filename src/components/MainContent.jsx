@@ -3,15 +3,19 @@ import { useContext } from "react";
 import { QuizContext } from "../store/quiz-context";
 
 import Login from "../components/Login";
-import MainGame from "../components/Game";
+import Categories from "./Categories";
+import Game from "../components/Game";
 
 export default function MainContent() {
-  const { selectedCategoryCode } = useContext(QuizContext);
+  const { selectedCategoryCode, enteredPlayerName } = useContext(QuizContext);
+
+  console.log(selectedCategoryCode);
 
   return (
     <>
-      {selectedCategoryCode && <MainGame />}
-      {!selectedCategoryCode && <Login />}
+      {!enteredPlayerName && <Login />}
+      {enteredPlayerName && !selectedCategoryCode && <Categories />}
+      {selectedCategoryCode && <Game />}
     </>
   );
 }
