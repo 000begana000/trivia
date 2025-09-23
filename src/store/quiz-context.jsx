@@ -3,10 +3,12 @@ import { createContext, useState, useEffect } from "react";
 export const QuizContext = createContext({
   selectedCategoryCode: "",
   quizItems: [],
+  userAnswers: [],
   isFetching: "",
   enteredPlayerName: "",
   savePlayerName: () => {},
   startGame: () => {},
+  setUserAnswers: () => {},
 });
 
 export default function QuizContextProvider({ children }) {
@@ -14,6 +16,7 @@ export default function QuizContextProvider({ children }) {
   const [selectedCategoryCode, setSelectedCategoryCode] = useState("");
   const [isFetching, setIsFetching] = useState(false);
   const [quizItems, setQuizItems] = useState([]);
+  const [userAnswers, setUserAnswers] = useState([]);
 
   useEffect(() => {
     // prevent too many requests
@@ -43,13 +46,19 @@ export default function QuizContextProvider({ children }) {
     setSelectedCategoryCode(categoryId);
   }
 
+  function handleSetUserAnswers(selectedAnswer) {
+    setUserAnswers(selectedAnswer);
+  }
+
   const ctxValue = {
     quizItems,
+    userAnswers,
     selectedCategoryCode,
     isFetching,
     enteredPlayerName,
     savePlayerName: handleSavePlayerName,
     startGame: handleStartGame,
+    setUserAnswers: handleSetUserAnswers,
   };
 
   return (
