@@ -66,7 +66,11 @@ export default function Game() {
           {!isFetching && quizItems.length > 0 && <p>{currentQuestion}</p>}
         </li>
         <li>
-          <QuestionTimer timeout={10000} onTimeout={handleSkipAnswer} />
+          <QuestionTimer
+            key={activeQuestionIndex}
+            timeout={10000}
+            onTimeout={handleSkipAnswer}
+          />
         </li>
         <li>
           <p>
