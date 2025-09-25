@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 
 import { QuizContext } from "../store/quiz-context";
 
@@ -17,12 +17,17 @@ const CATEGORIES = [
 ];
 
 export default function Categories() {
+  const [categoryName, setCategoryName] = useState("");
   const quizCtx = useContext(QuizContext);
   const playerName = quizCtx.enteredPlayerName;
+
   let categoryId;
 
-  function handleSelectCategoryId(selectedCategoryId) {
-    categoryId = selectedCategoryId;
+  // choose category id and category name
+  function handleSelectCategory(category) {
+    categoryId = category.id;
+    setCategoryName(category.name);
+    console.log(categoryId, categoryName);
   }
 
   function handleStartGame() {
@@ -35,12 +40,13 @@ export default function Categories() {
       <ul>
         {CATEGORIES.map(category => (
           <li key={category.id}>
-            <Button onClick={() => handleSelectCategoryId(category.id)}>
+            <Button onClick={() => handleSelectCategory(category)}>
               {category.name}
             </Button>
           </li>
         ))}
       </ul>
+      {categoryName && <p>You selected "{categoryName}"" theme!</p>}
       <Button onClick={handleStartGame}>Start new game</Button>
     </>
   );
