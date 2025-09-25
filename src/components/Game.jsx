@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useCallback } from "react";
 
 import { QuizContext } from "../store/quiz-context";
 import { decodeHTML } from "../store/htmlDecoder";
@@ -18,18 +18,20 @@ export default function Game() {
     selectAnswer,
   } = useContext(QuizContext);
 
-  console.log(quizItems);
-
   const activeQuestionIndex = userAnswers.length;
+  console.log(`active question index: ${activeQuestionIndex}`);
 
-  // decode HTML encoding
-  const currentQuestion =
-    !isFetching &&
-    quizItems.length > 0 &&
-    decodeHTML(quizItems[activeQuestionIndex].question);
+  const quizIsComplete = activeQuestionIndex === quizItems.length;
+
+  // display game over message
+  if (quizIsComplete) {
+    return <h1>Quiz is complete</h1>;
+  }
 
   // save user answers & current score
-  function handleSelectAnswer(selectedAsnwer) {
+  const handleSelectAnswer = useCallback(function handleSelectAnswer(
+    selectedAsnwer
+  ) {
     selectAnswer(prevAnswers => {
       return [...prevAnswers, selectedAsnwer];
     });
@@ -38,7 +40,20 @@ export default function Game() {
       currentScore += 100;
       console.log(`current score: ${currentScore}`);
     }
-  }
+  },
+  []);
+
+  // skip answer
+  const handleSkipAnswer = useCallback(
+    () => handleSelectAnswer(null),
+    [handleSelectAnswer]
+  );
+
+  // decode HTML encoding
+  const currentQuestion =
+    !isFetching &&
+    quizItems.length > 0 &&
+    decodeHTML(quizItems[activeQuestionIndex].question);
 
   return (
     <div>
@@ -51,10 +66,7 @@ export default function Game() {
           {!isFetching && quizItems.length > 0 && <p>{currentQuestion}</p>}
         </li>
         <li>
-          <QuestionTimer
-            timeout={10000}
-            onTimeout={() => handleSelectAnswer(null)}
-          />
+          <QuestionTimer timeout={10000} onTimeout={handleSkipAnswer} />
         </li>
         <li>
           <p>
