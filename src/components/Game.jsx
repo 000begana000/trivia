@@ -19,7 +19,6 @@ export default function Game() {
   } = useContext(QuizContext);
 
   const activeQuestionIndex = userAnswers.length;
-  console.log(`active question index: ${activeQuestionIndex}`);
 
   const quizIsComplete = activeQuestionIndex === quizItems.length;
 
@@ -38,7 +37,6 @@ export default function Game() {
 
     if (selectedAsnwer === quizItems[activeQuestionIndex].correct_answer) {
       currentScore += 100;
-      console.log(`current score: ${currentScore}`);
     }
   },
   []);
@@ -58,7 +56,7 @@ export default function Game() {
   return (
     <div>
       <p>username: {enteredPlayerName}</p>
-      <p>current score: 0</p>
+      <p>current score: {currentScore}</p>
       <p>high score: 0</p>
       <ul>
         {isFetching && <p>Loading...</p>}

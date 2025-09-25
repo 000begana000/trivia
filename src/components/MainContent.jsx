@@ -9,8 +9,6 @@ import Game from "../components/Game";
 export default function MainContent() {
   const { selectedCategoryCode, enteredPlayerName } = useContext(QuizContext);
 
-  console.log(selectedCategoryCode);
-
   return (
     <>
       {!enteredPlayerName && <Login />}
