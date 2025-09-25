@@ -22,7 +22,10 @@ export default function Game() {
   const activeQuestionIndex = userAnswers.length;
 
   // decode HTML encoding
-  const currentQuestion = decodeHTML(quizItems[activeQuestionIndex].question);
+  const currentQuestion =
+    !isFetching &&
+    quizItems.length > 0 &&
+    decodeHTML(quizItems[activeQuestionIndex].question);
 
   // save user answers & current score
   function handleSelectAnswer(selectedAsnwer) {
