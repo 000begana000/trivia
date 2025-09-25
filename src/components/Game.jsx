@@ -14,7 +14,7 @@ export default function Game() {
     isFetching,
     quizItems,
     userAnswers,
-    setUserAnswers,
+    selectAnswer,
   } = useContext(QuizContext);
 
   console.log(quizItems);
@@ -25,8 +25,8 @@ export default function Game() {
   const currentQuestion = decodeHTML(quizItems[activeQuestionIndex].question);
 
   // save user answers & current score
-  function handleSetUserAnswers(selectedAsnwer) {
-    setUserAnswers(prevAnswers => {
+  function handleSelectAnswer(selectedAsnwer) {
+    selectAnswer(prevAnswers => {
       return [...prevAnswers, selectedAsnwer];
     });
 
@@ -48,10 +48,10 @@ export default function Game() {
         </li>
         <li>
           <p>
-            <Button onClick={() => handleSetUserAnswers("True")}>True</Button>
+            <Button onClick={() => handleSelectAnswer("True")}>True</Button>
           </p>
           <p>
-            <Button onClick={() => handleSetUserAnswers("False")}>False</Button>
+            <Button onClick={() => handleSelectAnswer("False")}>False</Button>
           </p>
         </li>
       </ul>

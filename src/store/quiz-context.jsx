@@ -8,7 +8,7 @@ export const QuizContext = createContext({
   enteredPlayerName: "",
   savePlayerName: () => {},
   startGame: () => {},
-  setUserAnswers: () => {},
+  selectAnswer: () => {},
 });
 
 export default function QuizContextProvider({ children }) {
@@ -46,7 +46,7 @@ export default function QuizContextProvider({ children }) {
     setSelectedCategoryCode(categoryId);
   }
 
-  function handleSetUserAnswers(selectedAnswer) {
+  function handleSelectAnswer(selectedAnswer) {
     setUserAnswers(selectedAnswer);
   }
 
@@ -58,7 +58,7 @@ export default function QuizContextProvider({ children }) {
     enteredPlayerName,
     savePlayerName: handleSavePlayerName,
     startGame: handleStartGame,
-    setUserAnswers: handleSetUserAnswers,
+    selectAnswer: handleSelectAnswer,
   };
 
   return (
