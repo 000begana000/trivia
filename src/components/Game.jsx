@@ -21,6 +21,9 @@ export default function Game() {
 
   const activeQuestionIndex = userAnswers.length;
 
+  // decode HTML encoding
+  const currentQuestion = decodeHTML(quizItems[activeQuestionIndex].question);
+
   // save user answers & current score
   function handleSetUserAnswers(selectedAsnwer) {
     setUserAnswers(prevAnswers => {
@@ -41,9 +44,7 @@ export default function Game() {
       <ul>
         {isFetching && <p>Loading...</p>}
         <li>
-          {!isFetching && quizItems.length > 0 && (
-            <p>{quizItems[activeQuestionIndex].question}</p>
-          )}
+          {!isFetching && quizItems.length > 0 && <p>{currentQuestion}</p>}
         </li>
         <li>
           <p>
