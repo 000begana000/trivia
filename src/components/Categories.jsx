@@ -16,12 +16,12 @@ const CATEGORIES = [
   { id: 31, name: "Japanese Anime & Manga" },
 ];
 
+let categoryId;
+
 export default function Categories() {
   const [categoryName, setCategoryName] = useState("");
   const quizCtx = useContext(QuizContext);
   const playerName = quizCtx.enteredPlayerName;
-
-  let categoryId;
 
   // choose category id and category name
   function handleSelectCategory(category) {
@@ -46,7 +46,7 @@ export default function Categories() {
           </li>
         ))}
       </ul>
-      {categoryName && <p>You selected "{categoryName}"" theme!</p>}
+      {categoryName && <p>You selected "{categoryName}" theme!</p>}
       <Button onClick={handleStartGame}>Start new game</Button>
     </>
   );
