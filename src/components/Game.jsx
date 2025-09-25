@@ -4,6 +4,7 @@ import { QuizContext } from "../store/quiz-context";
 import { decodeHTML } from "../store/htmlDecoder";
 
 import Button from "./UI/Button";
+import QuestionTimer from "./QuestionTimer";
 
 // temporary current score
 let currentScore = 0;
@@ -50,10 +51,14 @@ export default function Game() {
           {!isFetching && quizItems.length > 0 && <p>{currentQuestion}</p>}
         </li>
         <li>
+          <QuestionTimer
+            timeout={10000}
+            onTimeout={() => handleSelectAnswer(null)}
+          />
+        </li>
+        <li>
           <p>
             <Button onClick={() => handleSelectAnswer("True")}>True</Button>
-          </p>
-          <p>
             <Button onClick={() => handleSelectAnswer("False")}>False</Button>
           </p>
         </li>
