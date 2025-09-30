@@ -20,22 +20,20 @@ export default function Game() {
 
   const activeQuestionIndex = userAnswers.length;
 
+  // quiz is complete message displays too early
   const quizIsComplete = activeQuestionIndex === quizItems.length;
 
-  // display game over message
-  if (quizIsComplete) {
-    return <h1>Quiz is complete</h1>;
-  }
+  const currentAnswer = !quizIsComplete
+    ? quizItems[activeQuestionIndex].correct_answer
+    : null;
 
   // save user answers & current score
   const handleSelectAnswer = useCallback(function handleSelectAnswer(
-    selectedAsnwer
+    selectedAnswer
   ) {
-    selectAnswer(prevAnswers => {
-      return [...prevAnswers, selectedAsnwer];
-    });
-
-    if (selectedAsnwer === quizItems[activeQuestionIndex].correct_answer) {
+    selectAnswer(selectedAnswer);
+    if (selectedAnswer === currentAnswer) {
+      // doesn't work correctly
       currentScore += 100;
     }
   },
@@ -46,6 +44,11 @@ export default function Game() {
     () => handleSelectAnswer(null),
     [handleSelectAnswer]
   );
+
+  // display game over message
+  if (quizIsComplete) {
+    return <h1>Quiz is complete / total score: {currentScore}</h1>;
+  }
 
   // decode HTML encoding
   const currentQuestion =

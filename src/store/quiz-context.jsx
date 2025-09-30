@@ -47,7 +47,7 @@ export default function QuizContextProvider({ children }) {
   }
 
   function handleSelectAnswer(selectedAnswer) {
-    setUserAnswers(selectedAnswer);
+    setUserAnswers(prevAnswers => [...prevAnswers, selectedAnswer]);
   }
 
   const ctxValue = {
