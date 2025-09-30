@@ -6,10 +6,11 @@ import { decodeHTML } from "../store/htmlDecoder";
 import Button from "./UI/Button";
 import QuestionTimer from "./QuestionTimer";
 
-// temporary current score
+// current score
 let currentScore = 0;
 
 export default function Game() {
+  // quiz context
   const {
     enteredPlayerName,
     isFetching,
@@ -18,26 +19,37 @@ export default function Game() {
     selectAnswer,
   } = useContext(QuizContext);
 
+  console.log(quizItems);
+
   const activeQuestionIndex = userAnswers.length;
 
   // quiz is complete message displays too early
-  const quizIsComplete = activeQuestionIndex === quizItems.length;
-
-  const currentAnswer = !quizIsComplete
-    ? quizItems[activeQuestionIndex].correct_answer
-    : null;
+  const quizIsComplete = activeQuestionIndex === 9;
 
   // save user answers & current score
-  const handleSelectAnswer = useCallback(function handleSelectAnswer(
-    selectedAnswer
-  ) {
-    selectAnswer(selectedAnswer);
-    if (selectedAnswer === currentAnswer) {
-      // doesn't work correctly
-      currentScore += 100;
-    }
-  },
-  []);
+  const handleSelectAnswer = useCallback(
+    function handleSelectAnswer(selectedAnswer) {
+      selectAnswer(selectedAnswer);
+
+      // Safety check
+      if (!quizItems || !quizItems[activeQuestionIndex]) {
+        console.error("Quiz data not available");
+        return;
+      }
+
+      let correctAnswer =
+        quizItems && quizItems[activeQuestionIndex].correct_answer;
+
+      // Convert both to lowercase strings for comparison
+      const normalizedSelected = String(selectedAnswer).toLowerCase();
+      const normalizedCorrect = String(correctAnswer).toLowerCase();
+
+      if (normalizedSelected === normalizedCorrect) {
+        currentScore += 100;
+      }
+    },
+    [quizItems, activeQuestionIndex, selectAnswer]
+  );
 
   // skip answer
   const handleSkipAnswer = useCallback(
@@ -75,8 +87,8 @@ export default function Game() {
         </li>
         <li>
           <p>
-            <Button onClick={() => handleSelectAnswer("True")}>True</Button>
-            <Button onClick={() => handleSelectAnswer("False")}>False</Button>
+            <Button onClick={() => handleSelectAnswer("true")}>True</Button>
+            <Button onClick={() => handleSelectAnswer("false")}>False</Button>
           </p>
         </li>
       </ul>
