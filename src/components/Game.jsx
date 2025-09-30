@@ -10,7 +10,6 @@ import QuestionTimer from "./QuestionTimer";
 let currentScore = 0;
 
 export default function Game() {
-  // quiz context
   const {
     enteredPlayerName,
     isFetching,
@@ -23,7 +22,6 @@ export default function Game() {
 
   const activeQuestionIndex = userAnswers.length;
 
-  // quiz is complete message displays too early
   const quizIsComplete = activeQuestionIndex === 9;
 
   // save user answers & current score
