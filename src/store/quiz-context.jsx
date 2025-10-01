@@ -1,5 +1,7 @@
 import { createContext, useState, useEffect } from "react";
 
+import { fetchQuizItems } from "../http";
+
 export const QuizContext = createContext({
   selectedCategoryCode: "",
   quizItems: [],
@@ -20,28 +22,24 @@ export default function QuizContextProvider({ children }) {
   const [userAnswers, setUserAnswers] = useState([]);
 
   useEffect(() => {
-    setIsFetching(true);
     // prevent too many requests
     if (!selectedCategoryCode) return;
 
-    async function fetchQuizItems() {
+    async function fetchQuiz() {
+      setIsFetching(true);
+
       try {
-        const response = await fetch(
-          `https://opentdb.com/api.php?amount=10&category=${selectedCategoryCode}&difficulty=easy&type=boolean`
-        );
-        const resData = await response.json();
+        const quizItems = await fetchQuizItems(selectedCategoryCode);
 
-        if (!response.ok) {
-          throw new Error("Faild to fetch quiz items.");
-        }
-
-        setQuizItems(resData.results);
+        setQuizItems(quizItems);
+        setIsFetching(false);
       } catch (error) {
         setError({ message: error.message || "Could not fetch quiz items." });
+        setIsFetching(false);
       }
-      setIsFetching(false);
     }
-    fetchQuizItems();
+
+    fetchQuiz();
   }, [selectedCategoryCode]);
 
   // save player name
