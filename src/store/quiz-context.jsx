@@ -15,6 +15,7 @@ export default function QuizContextProvider({ children }) {
   const [selectedCategoryCode, setSelectedCategoryCode] = useState("");
   const [isFetching, setIsFetching] = useState(false);
   const [quizItems, setQuizItems] = useState([]);
+  const [error, setError] = useState();
   const [enteredPlayerName, setEnteredPlayerName] = useState("Begana");
   const [userAnswers, setUserAnswers] = useState([]);
 
@@ -24,11 +25,20 @@ export default function QuizContextProvider({ children }) {
     if (!selectedCategoryCode) return;
 
     async function fetchQuizItems() {
-      const response = await fetch(
-        `https://opentdb.com/api.php?amount=10&category=${selectedCategoryCode}&difficulty=easy&type=boolean`
-      );
-      const resData = await response.json();
-      setQuizItems(resData.results);
+      try {
+        const response = await fetch(
+          `https://opentdb.com/api.php?amount=10&category=${selectedCategoryCode}&difficulty=easy&type=boolean`
+        );
+        const resData = await response.json();
+
+        if (!response.ok) {
+          throw new Error("Faild to fetch quiz items.");
+        }
+
+        setQuizItems(resData.results);
+      } catch (error) {
+        setError({ message: error.message || "Could not fetch quiz items." });
+      }
       setIsFetching(false);
     }
     fetchQuizItems();
