@@ -1,6 +1,4 @@
-import { useContext, useState } from "react";
-
-import { QuizContext } from "../store/quiz-context";
+import { useState } from "react";
 
 import Button from "./UI/Button";
 
@@ -18,20 +16,17 @@ const CATEGORIES = [
 
 let categoryId;
 
-export default function Categories() {
+export default function Categories({ playerName, selectCategory }) {
   const [categoryName, setCategoryName] = useState("");
-  const quizCtx = useContext(QuizContext);
-  const playerName = quizCtx.enteredPlayerName;
 
   // choose category id and category name
   function handleSelectCategory(category) {
     categoryId = category.id;
     setCategoryName(category.name);
-    console.log(categoryId, categoryName);
   }
 
   function handleStartGame() {
-    quizCtx.startGame(categoryId);
+    selectCategory(categoryId);
   }
 
   return (

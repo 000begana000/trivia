@@ -1,6 +1,4 @@
-import { useContext, useCallback } from "react";
-
-import { QuizContext } from "../store/quiz-context";
+import { useState, useCallback } from "react";
 import { decodeHTML } from "../store/htmlDecoder";
 
 import Button from "./UI/Button";
@@ -9,16 +7,8 @@ import QuestionTimer from "./QuestionTimer";
 // current score
 let currentScore = 0;
 
-export default function Game() {
-  const {
-    enteredPlayerName,
-    isFetching,
-    quizItems,
-    userAnswers,
-    selectAnswer,
-  } = useContext(QuizContext);
-
-  console.log(quizItems);
+export default function Game({ playerName, quizItems, isFetching }) {
+  const [userAnswers, setUserAnswers] = useState([]);
 
   const activeQuestionIndex = userAnswers.length;
 
@@ -27,7 +17,7 @@ export default function Game() {
   // save user answers & current score
   const handleSelectAnswer = useCallback(
     function handleSelectAnswer(selectedAnswer) {
-      selectAnswer(selectedAnswer);
+      setUserAnswers(prevAnswers => [...prevAnswers, selectedAnswer]);
 
       // Safety check
       if (!quizItems || !quizItems[activeQuestionIndex]) {
@@ -46,7 +36,7 @@ export default function Game() {
         currentScore += 100;
       }
     },
-    [quizItems, activeQuestionIndex, selectAnswer]
+    [quizItems, activeQuestionIndex]
   );
 
   // skip answer
@@ -68,7 +58,7 @@ export default function Game() {
 
   return (
     <div>
-      <p>username: {enteredPlayerName}</p>
+      <p>username: {playerName}</p>
       <p>current score: {currentScore}</p>
       <p>high score: 0</p>
       <ul>
