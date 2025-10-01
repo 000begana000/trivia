@@ -10,9 +10,13 @@ let currentScore = 0;
 export default function Game({ playerName, quizItems, isFetching }) {
   const [userAnswers, setUserAnswers] = useState([]);
 
+  // index of current question
   const activeQuestionIndex = userAnswers.length;
 
   const quizIsComplete = activeQuestionIndex === 9;
+
+  // reset the current score when player starts new game
+  if (isFetching) currentScore = 0;
 
   // save user answers & current score
   const handleSelectAnswer = useCallback(
