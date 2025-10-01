@@ -12,29 +12,26 @@ export const QuizContext = createContext({
 });
 
 export default function QuizContextProvider({ children }) {
-  const [enteredPlayerName, setEnteredPlayerName] = useState("Begana");
   const [selectedCategoryCode, setSelectedCategoryCode] = useState("");
   const [isFetching, setIsFetching] = useState(false);
   const [quizItems, setQuizItems] = useState([]);
+  const [enteredPlayerName, setEnteredPlayerName] = useState("Begana");
   const [userAnswers, setUserAnswers] = useState([]);
 
   useEffect(() => {
+    setIsFetching(true);
     // prevent too many requests
     if (!selectedCategoryCode) return;
 
-    setIsFetching(true); // loading state
-
-    fetch(
-      `https://opentdb.com/api.php?amount=10&category=${selectedCategoryCode}&difficulty=easy&type=boolean`
-    )
-      .then(response => {
-        console.log("fetching");
-        return response.json();
-      })
-      .then(resData => {
-        setQuizItems(resData.results);
-        setIsFetching(false); // loading state
-      });
+    async function fetchQuizItems() {
+      const response = await fetch(
+        `https://opentdb.com/api.php?amount=10&category=${selectedCategoryCode}&difficulty=easy&type=boolean`
+      );
+      const resData = await response.json();
+      setQuizItems(resData.results);
+      setIsFetching(false);
+    }
+    fetchQuizItems();
   }, [selectedCategoryCode]);
 
   // save player name
@@ -42,12 +39,12 @@ export default function QuizContextProvider({ children }) {
     setEnteredPlayerName(playerName);
   }
 
-  function handleStartGame(categoryId) {
-    setSelectedCategoryCode(categoryId);
-  }
-
   function handleSelectAnswer(selectedAnswer) {
     setUserAnswers(prevAnswers => [...prevAnswers, selectedAnswer]);
+  }
+
+  function handleStartGame(categoryId) {
+    setSelectedCategoryCode(categoryId);
   }
 
   const ctxValue = {
