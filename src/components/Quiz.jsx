@@ -8,10 +8,12 @@ import QuestionTimer from "./QuestionTimer";
 let currentScore = 0;
 
 export default function Quiz({ playerName, quizItems, isFetching }) {
+  const [answerState, setAnswerState] = useState("unanswered");
   const [userAnswers, setUserAnswers] = useState([]);
 
   // index of current question
-  const activeQuestionIndex = userAnswers.length;
+  const activeQuestionIndex =
+    answerState === "unanswered" ? userAnswers.length : userAnswers.length - 1;
 
   const quizIsComplete = activeQuestionIndex === 9;
 
@@ -21,6 +23,7 @@ export default function Quiz({ playerName, quizItems, isFetching }) {
   // save user answers & current score
   const handleSelectAnswer = useCallback(
     function handleSelectAnswer(selectedAnswer) {
+      setAnswerState("answered");
       setUserAnswers(prevAnswers => [...prevAnswers, selectedAnswer]);
 
       // Safety check
@@ -29,19 +32,35 @@ export default function Quiz({ playerName, quizItems, isFetching }) {
         return;
       }
 
-      let correctAnswer =
-        quizItems && quizItems[activeQuestionIndex].correct_answer;
-
-      // Convert both to lowercase strings for comparison
-      const normalizedSelected = String(selectedAnswer).toLowerCase();
-      const normalizedCorrect = String(correctAnswer).toLowerCase();
-
-      if (normalizedSelected === normalizedCorrect) {
-        currentScore += 100;
-      }
+      setTimeout(() => {
+        handleCurrentScore(selectedAnswer);
+        setTimeout(() => {
+          setAnswerState("unanswered");
+        }, 2000);
+      }, 1000);
     },
     [quizItems, activeQuestionIndex]
   );
+
+  // distinguish answer and save current score
+  function handleCurrentScore(selectedAnswer) {
+    let correctAnswer =
+      quizItems && quizItems[activeQuestionIndex].correct_answer;
+
+    // Convert both to lowercase strings for comparison
+    const normalizedSelected = String(selectedAnswer).toLowerCase();
+    const normalizedCorrect = String(correctAnswer).toLowerCase();
+
+    if (normalizedSelected === normalizedCorrect) {
+      setAnswerState("correct");
+      console.log("correct");
+
+      currentScore += 100;
+    } else {
+      setAnswerState("wrong");
+      console.log("wrong");
+    }
+  }
 
   // skip answer
   const handleSkipAnswer = useCallback(
