@@ -4,7 +4,7 @@ import { fetchQuizItems } from "../http";
 
 import Login from "../components/Login";
 import Categories from "./Categories";
-import Game from "../components/Game";
+import Quiz from "./Quiz";
 
 export default function MainContent() {
   const [playerName, setPlayerName] = useState("Begana");
@@ -54,7 +54,7 @@ export default function MainContent() {
         />
       )}
       {categoryId && (
-        <Game
+        <Quiz
           playerName={playerName}
           quizItems={quizItems}
           isFetching={isFetching}

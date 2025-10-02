@@ -7,7 +7,7 @@ import QuestionTimer from "./QuestionTimer";
 // current score
 let currentScore = 0;
 
-export default function Game({ playerName, quizItems, isFetching }) {
+export default function Quiz({ playerName, quizItems, isFetching }) {
   const [userAnswers, setUserAnswers] = useState([]);
 
   // index of current question
