@@ -67,22 +67,28 @@ export default function Quiz({ playerName, quizItems, isFetching }) {
       <p>high score: 0</p>
       <ul>
         {isFetching && <p>Loading...</p>}
-        <li>
-          {!isFetching && quizItems.length > 0 && <p>{currentQuestion}</p>}
-        </li>
-        <li>
-          <QuestionTimer
-            key={activeQuestionIndex}
-            timeout={10000}
-            onTimeout={handleSkipAnswer}
-          />
-        </li>
-        <li>
-          <p>
-            <Button onClick={() => handleSelectAnswer("true")}>True</Button>
-            <Button onClick={() => handleSelectAnswer("false")}>False</Button>
-          </p>
-        </li>
+        {!isFetching && (
+          <>
+            <li>
+              {!isFetching && quizItems.length > 0 && <p>{currentQuestion}</p>}
+            </li>
+            <li>
+              <QuestionTimer
+                key={activeQuestionIndex}
+                timeout={10000}
+                onTimeout={handleSkipAnswer}
+              />
+            </li>
+            <li>
+              <p>
+                <Button onClick={() => handleSelectAnswer("true")}>True</Button>
+                <Button onClick={() => handleSelectAnswer("false")}>
+                  False
+                </Button>
+              </p>
+            </li>
+          </>
+        )}
       </ul>
     </div>
   );
