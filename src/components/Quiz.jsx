@@ -1,6 +1,14 @@
 import Question from "./Question";
 
-export default function Quiz({ playerName, quizItems, isFetching }) {
+// current score
+let currentScore = 0;
+
+export default function Quiz({
+  playerName,
+  quizItems,
+  isFetching,
+  onStartNewGame,
+}) {
   return (
     <div>
       <p>username: {playerName}</p>
@@ -8,7 +16,11 @@ export default function Quiz({ playerName, quizItems, isFetching }) {
       <p>high score: 0</p>
       {isFetching && <p>Loading...</p>}
       {!isFetching && (
-        <Question quizItems={quizItems} isFetching={isFetching} />
+        <Question
+          quizItems={quizItems}
+          isFetching={isFetching}
+          onStartNewGame={onStartNewGame}
+        />
       )}
     </div>
   );

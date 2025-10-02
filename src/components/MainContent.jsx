@@ -43,6 +43,10 @@ export default function MainContent() {
     setCategoryId(selectedCategoryId);
   }
 
+  function handleStartNewGame() {
+    setCategoryId("");
+  }
+
   return (
     <>
       {!playerName && <Login savePlayerName={handleSavePlayerName} />}
@@ -58,6 +62,7 @@ export default function MainContent() {
           playerName={playerName}
           quizItems={quizItems}
           isFetching={isFetching}
+          onStartNewGame={handleStartNewGame}
         />
       )}
     </>

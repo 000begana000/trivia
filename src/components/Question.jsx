@@ -5,10 +5,7 @@ import { decodeHTML } from "../store/htmlDecoder";
 import Button from "./UI/Button";
 import QuestionTimer from "./QuestionTimer";
 
-// current score
-let currentScore = 0;
-
-export default function Question({ quizItems, isFetching }) {
+export default function Question({ quizItems, isFetching, onStartNewGame }) {
   const [answerState, setAnswerState] = useState("unanswered");
   const [userAnswers, setUserAnswers] = useState([]);
 
@@ -87,7 +84,12 @@ export default function Question({ quizItems, isFetching }) {
 
   // display game over message
   if (quizIsComplete) {
-    return <h1>Quiz is complete / total score: {currentScore}</h1>;
+    return (
+      <>
+        <h1>Quiz is complete / total score: current score</h1>
+        <button onClick={onStartNewGame}>Start New Game</button>
+      </>
+    );
   }
 
   return (
