@@ -5,7 +5,15 @@ import { decodeHTML } from "../store/htmlDecoder";
 import Button from "./UI/Button";
 import QuestionTimer from "./QuestionTimer";
 
-export default function Question({ quizItems, isFetching, onStartNewGame }) {
+// current score
+let currentScore = 0;
+
+export default function Question({
+  playerName,
+  quizItems,
+  isFetching,
+  onStartNewGame,
+}) {
   const [answerState, setAnswerState] = useState("unanswered");
   const [userAnswers, setUserAnswers] = useState([]);
 
@@ -86,28 +94,38 @@ export default function Question({ quizItems, isFetching, onStartNewGame }) {
   if (quizIsComplete) {
     return (
       <>
-        <h1>Quiz is complete / total score: current score</h1>
+        <h1>Quiz is complete / total score: {currentScore}</h1>
         <button onClick={onStartNewGame}>Start New Game</button>
       </>
     );
   }
 
   return (
-    <ul>
-      <li>{!isFetching && quizItems.length > 0 && <p>{currentQuestion}</p>}</li>
-      <li>
-        <QuestionTimer
-          key={timer}
-          timeout={timer}
-          onTimeout={handleSkipAnswer}
-        />
-      </li>
-      <li>
-        <p>
-          <Button onClick={() => handleSelectAnswer("true")}>True</Button>
-          <Button onClick={() => handleSelectAnswer("false")}>False</Button>
-        </p>
-      </li>
-    </ul>
+    <div>
+      <p>username: {playerName}</p>
+      <p>current score: {currentScore}</p>
+      <p>high score: 0</p>
+      {isFetching && <p>Loading...</p>}
+      {!isFetching && (
+        <ul>
+          <li>
+            {!isFetching && quizItems.length > 0 && <p>{currentQuestion}</p>}
+          </li>
+          <li>
+            <QuestionTimer
+              key={timer}
+              timeout={timer}
+              onTimeout={handleSkipAnswer}
+            />
+          </li>
+          <li>
+            <p>
+              <Button onClick={() => handleSelectAnswer("true")}>True</Button>
+              <Button onClick={() => handleSelectAnswer("false")}>False</Button>
+            </p>
+          </li>
+        </ul>
+      )}
+    </div>
   );
 }
