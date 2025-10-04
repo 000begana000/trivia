@@ -30,6 +30,18 @@ export default function Question({
     quizItems.length > 0 &&
     decodeHTML(quizItems[activeQuestionIndex].question);
 
+  // quiz is complete after 10 questions
+  const quizIsComplete = activeQuestionIndex === 9;
+
+  // updating progress bar depends on the answerState
+  let timer = 10000;
+  if (answerState === "answered") {
+    timer = 1000;
+  }
+  if (answerState === "correct" || answerState === "wrong") {
+    timer = 2000;
+  }
+
   // save user answers & current score
   const handleSelectAnswer = useCallback(
     function handleSelectAnswer(selectedAnswer) {
@@ -76,18 +88,6 @@ export default function Question({
       setAnswerState("wrong");
       console.log("wrong");
     }
-  }
-
-  const quizIsComplete = activeQuestionIndex === 9;
-
-  let timer = 10000;
-
-  if (answerState === "answered") {
-    timer = 1000;
-  }
-
-  if (answerState === "correct" || answerState === "wrong") {
-    timer = 2000;
   }
 
   // display game over message
