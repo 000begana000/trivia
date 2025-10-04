@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 
 import { decodeHTML } from "../store/htmlDecoder";
 
+import Player from "./Player";
 import Button from "./UI/Button";
 import QuestionTimer from "./QuestionTimer";
 
@@ -102,10 +103,8 @@ export default function Question({
 
   return (
     <div>
-      <p>username: {playerName}</p>
-      <p>current score: {currentScore}</p>
-      <p>high score: 0</p>
       {isFetching && <p>Loading...</p>}
+      <Player currentScore={currentScore} playerName={playerName} />
       {!isFetching && (
         <div>
           {!isFetching && quizItems.length > 0 && <p>{currentQuestion}</p>}
