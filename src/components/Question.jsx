@@ -107,24 +107,18 @@ export default function Question({
       <p>high score: 0</p>
       {isFetching && <p>Loading...</p>}
       {!isFetching && (
-        <ul>
-          <li>
-            {!isFetching && quizItems.length > 0 && <p>{currentQuestion}</p>}
-          </li>
-          <li>
-            <QuestionTimer
-              key={timer}
-              timeout={timer}
-              onTimeout={handleSkipAnswer}
-            />
-          </li>
-          <li>
-            <p>
-              <Button onClick={() => handleSelectAnswer("true")}>True</Button>
-              <Button onClick={() => handleSelectAnswer("false")}>False</Button>
-            </p>
-          </li>
-        </ul>
+        <div>
+          {!isFetching && quizItems.length > 0 && <p>{currentQuestion}</p>}
+          <QuestionTimer
+            key={timer}
+            timeout={timer}
+            onTimeout={handleSkipAnswer}
+          />
+          <p>
+            <Button onClick={() => handleSelectAnswer("true")}>True</Button>
+            <Button onClick={() => handleSelectAnswer("false")}>False</Button>
+          </p>
+        </div>
       )}
     </div>
   );
