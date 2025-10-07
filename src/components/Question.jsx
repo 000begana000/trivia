@@ -13,7 +13,7 @@ export default function Question({
   isFetching,
   onStartNewGame,
 }) {
-  const [answerState, setAnswerState] = useState("unanswered");
+  const [answerState, setAnswerState] = useState("");
   const [userAnswers, setUserAnswers] = useState([]);
   const [currentScore, setCurrentScore] = useState(0);
   const [playerLife, setPlayerLife] = useState(5);
@@ -23,7 +23,7 @@ export default function Question({
 
   // index of current question
   const activeQuestionIndex =
-    answerState === "unanswered" ? userAnswers.length : userAnswers.length - 1;
+    answerState === "" ? userAnswers.length : userAnswers.length - 1;
 
   // decode HTML encoding
   const currentQuestion =
@@ -58,7 +58,7 @@ export default function Question({
       setTimeout(() => {
         handleCurrentScore(selectedAnswer);
         setTimeout(() => {
-          setAnswerState("unanswered");
+          setAnswerState("");
         }, 2000);
       }, 1000);
     },
@@ -119,8 +119,18 @@ export default function Question({
             answerState={answerState}
           />
           <p>
-            <Button onClick={() => handleSelectAnswer("true")}>True</Button>
-            <Button onClick={() => handleSelectAnswer("false")}>False</Button>
+            <Button
+              disabled={answerState}
+              onClick={() => handleSelectAnswer("true")}
+            >
+              True
+            </Button>
+            <Button
+              disabled={answerState}
+              onClick={() => handleSelectAnswer("false")}
+            >
+              False
+            </Button>
           </p>
         </div>
       )}
