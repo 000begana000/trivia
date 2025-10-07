@@ -6,9 +6,6 @@ import Player from "./Player";
 import Button from "./UI/Button";
 import QuestionTimer from "./QuestionTimer";
 
-// current score
-let currentScore = 0;
-
 export default function Question({
   playerName,
   quizItems,
@@ -17,9 +14,10 @@ export default function Question({
 }) {
   const [answerState, setAnswerState] = useState("unanswered");
   const [userAnswers, setUserAnswers] = useState([]);
+  const [currentScore, setCurrentScore] = useState(0);
 
-  // reset the current score when player starts new game
-  if (isFetching) currentScore = 0;
+  // Reset score when fetching new quiz
+  if (isFetching && currentScore !== 0) setCurrentScore(0);
 
   // index of current question
   const activeQuestionIndex =
@@ -84,7 +82,7 @@ export default function Question({
       setAnswerState("correct");
       console.log("correct");
 
-      currentScore += 100;
+      setCurrentScore(prevScore => prevScore + 100);
     } else {
       setAnswerState("wrong");
       console.log("wrong");
@@ -104,7 +102,11 @@ export default function Question({
   return (
     <div>
       {isFetching && <p>Loading...</p>}
-      <Player currentScore={currentScore} playerName={playerName} />
+      <Player
+        currentScore={currentScore}
+        playerName={playerName}
+        answerState={answerState}
+      />
       {!isFetching && (
         <div>
           {!isFetching && quizItems.length > 0 && <p>{currentQuestion}</p>}
@@ -112,6 +114,7 @@ export default function Question({
             key={timer}
             timeout={timer}
             onTimeout={handleSkipAnswer}
+            answerState={answerState}
           />
           <p>
             <Button onClick={() => handleSelectAnswer("true")}>True</Button>
