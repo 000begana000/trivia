@@ -5,6 +5,7 @@ import { decodeHTML } from "../store/htmlDecoder";
 import Player from "./Player";
 import Button from "./UI/Button";
 import QuestionTimer from "./QuestionTimer";
+import GameOver from "./GameOver";
 
 export default function Question({
   playerName,
@@ -15,6 +16,7 @@ export default function Question({
   const [answerState, setAnswerState] = useState("unanswered");
   const [userAnswers, setUserAnswers] = useState([]);
   const [currentScore, setCurrentScore] = useState(0);
+  const [playerLife, setPlayerLife] = useState(5);
 
   // Reset score when fetching new quiz
   if (isFetching && currentScore !== 0) setCurrentScore(0);
@@ -85,16 +87,16 @@ export default function Question({
       setCurrentScore(prevScore => prevScore + 100);
     } else {
       setAnswerState("wrong");
+      setPlayerLife(prevLife => prevLife - 1);
       console.log("wrong");
     }
   }
 
   // display game over message
-  if (quizIsComplete) {
+  if (quizIsComplete || playerLife === 0) {
     return (
       <>
-        <h1>Quiz is complete / total score: {currentScore}</h1>
-        <button onClick={onStartNewGame}>Start New Game</button>
+        <GameOver currentScore={currentScore} onStartNewGame={onStartNewGame} />
       </>
     );
   }
@@ -105,7 +107,7 @@ export default function Question({
       <Player
         currentScore={currentScore}
         playerName={playerName}
-        answerState={answerState}
+        playerLife={playerLife}
       />
       {!isFetching && (
         <div>

@@ -1,14 +1,4 @@
-import { useState, useEffect } from "react";
-
-export default function Player({ playerName, currentScore, answerState }) {
-  const [playerLife, setPlayerLife] = useState(5);
-
-  useEffect(() => {
-    if (answerState === "wrong") {
-      setPlayerLife(prevLife => prevLife - 1);
-    }
-  }, [answerState]);
-
+export default function Player({ playerName, currentScore, playerLife }) {
   return (
     <div>
       <p>username: {playerName}</p>
