@@ -6,12 +6,14 @@ import Player from "./Player";
 import Button from "./UI/Button";
 import QuestionTimer from "./QuestionTimer";
 import GameOver from "./GameOver";
+import Categories from "./Categories";
 
 export default function Question({
   playerName,
   quizItems,
   isFetching,
   onStartNewGame,
+  selectCategory,
 }) {
   const [answerState, setAnswerState] = useState("");
   const [userAnswers, setUserAnswers] = useState([]);
@@ -25,14 +27,15 @@ export default function Question({
   const activeQuestionIndex =
     answerState === "" ? userAnswers.length : userAnswers.length - 1;
 
+  // quiz is complete after 10 questions
+  const quizIsComplete = activeQuestionIndex === 10;
+
   // decode HTML encoding
   const currentQuestion =
     !isFetching &&
     quizItems.length > 0 &&
+    !quizIsComplete &&
     decodeHTML(quizItems[activeQuestionIndex].question);
-
-  // quiz is complete after 10 questions
-  const quizIsComplete = activeQuestionIndex === 9;
 
   // updating progress bar depends on the answerState
   let timer = 10000;
@@ -93,11 +96,22 @@ export default function Question({
   }
 
   // display game over message
-  if (quizIsComplete || playerLife === 0) {
+  if (quizIsComplete && playerLife === 0) {
     return (
       <>
         <GameOver currentScore={currentScore} onStartNewGame={onStartNewGame} />
       </>
+    );
+  }
+
+  // continue game when player still have playerLife
+  if (quizIsComplete && playerLife > 0) {
+    return (
+      <Categories
+        playerName={playerName}
+        selectCategory={selectCategory}
+        playerLife={playerLife}
+      />
     );
   }
 

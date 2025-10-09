@@ -14,7 +14,9 @@ const CATEGORIES = [
   { id: 31, name: "Japanese Anime & Manga" },
 ];
 
-let categoryId;
+let playedCategories = [];
+
+let categoryId = {};
 
 export default function Categories({ playerName, selectCategory }) {
   const [categoryName, setCategoryName] = useState("");
@@ -27,6 +29,8 @@ export default function Categories({ playerName, selectCategory }) {
 
   function handleStartGame() {
     selectCategory(categoryId);
+    playedCategories.push(categoryId);
+    console.log(playedCategories);
   }
 
   return (

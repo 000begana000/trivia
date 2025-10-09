@@ -63,6 +63,7 @@ export default function Quiz() {
           quizItems={quizItems}
           isFetching={isFetching}
           onStartNewGame={handleStartNewGame}
+          selectCategory={handleSelectCategoryId}
         />
       )}
     </>
