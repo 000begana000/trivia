@@ -1,15 +1,23 @@
-import { useRef } from "react";
+import { useRef, useContext } from "react";
+
+import { QuizContext } from "../store/quiz-context";
 
 import Button from "./UI/Button";
 
-export default function Login({ savePlayerName }) {
-  const playerName = useRef();
+export default function Login() {
+  const { savePlayer } = useContext(QuizContext);
+
+  const enteredPlayerName = useRef();
 
   // save player name
   function handleSavePlayerName() {
-    savePlayerName(playerName.current.value);
-    playerName.current.value = "";
+    savePlayer(enteredPlayerName.current.value);
+    enteredPlayerName.current.value = "";
   }
+
+  // fetch players data
+
+  // save player data
 
   return (
     <div>
@@ -19,7 +27,7 @@ export default function Login({ savePlayerName }) {
           type="text"
           name=""
           id=""
-          ref={playerName}
+          ref={enteredPlayerName}
           required
           minLength={5}
           onInvalid={e =>
