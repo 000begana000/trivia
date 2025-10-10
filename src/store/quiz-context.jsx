@@ -1,4 +1,6 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
+
+import { fetchQuizItems } from "../http";
 
 export const QuizContext = createContext({
   players: [],
@@ -15,10 +17,10 @@ export const QuizContext = createContext({
     items: [],
     answerState: "",
   },
-  async: {
-    isFetching: false,
-    error: null,
-  },
+  savePlayer: enteredPlayerName => {},
+  selectCategoryId: selectedCategoryId => {},
+  savePlayedCategoryIds: categoryId => {},
+  startNewGame: () => {},
 });
 
 export default function QuizContextProvider({ children }) {
@@ -30,7 +32,6 @@ export default function QuizContextProvider({ children }) {
     life: 5,
     answers: [],
   });
-
   const [quiz, setQuiz] = useState({
     categoryId: "",
     playedCategoryIds: [],
@@ -43,12 +44,68 @@ export default function QuizContextProvider({ children }) {
     error: null,
   });
 
+  // fetch quiz items & start new game
+  useEffect(() => {
+    if (!quiz.categoryId) return; // prevent to many request
+
+    async function fetchQuiz(categoryId) {
+      setAsync(prevAsync => ({ ...prevAsync, isFetching: true }));
+
+      try {
+        const resData = await fetchQuizItems(categoryId);
+        setQuiz(prevQuiz => ({ ...prevQuiz, items: resData }));
+        setAsync(prevAsync => ({ ...prevAsync, isFetching: false }));
+      } catch (error) {
+        setAsync(prevAsync => ({
+          ...prevAsync,
+          error: { message: error.message || "Could not fetch quiz items." },
+        }));
+        setAsync(prevAsync => ({ ...prevAsync, isFetching: false }));
+      }
+    }
+
+    fetchQuiz(quiz.categoryId);
+  }, [quiz.categoryId]);
+
+  // Save player information
+  function handleSavePlayer(enteredPlayerName) {
+    setPlayer(prevPlayer => ({ ...prevPlayer, playerName: enteredPlayerName }));
+  }
+
+  // Select category id
+  function handleSelectCategoryId(selectedCategoryId) {
+    setQuiz(prevQuiz => ({ ...prevQuiz, categoryId: selectedCategoryId }));
+  }
+
+  // Save played category id
+  function handleSavePlayedCategoryIds(categoryId) {
+    setQuiz(prevQuiz =>
+      prevQuiz.playedCategoryIds.includes(categoryId)
+        ? { ...prevQuiz }
+        : {
+            ...prevQuiz,
+            playedCategoryIds: [...prevQuiz.playedCategoryIds, categoryId],
+          }
+    );
+  }
+
+  // Start new game
+  function handleStartNewGame() {
+    setQuiz({ ...prevQuiz, categoryId: "" });
+  }
+
   const ctxValue = {
     players,
     player,
     quiz,
     async,
+    savePlayer: handleSavePlayer,
+    selectCategoryId: handleSelectCategoryId,
+    savePlayedCategoryIds: handleSavePlayedCategoryIds,
+    startNewGame: handleStartNewGame,
   };
 
-  return <QuizContextProvider value={ctxValue}>{children}</QuizContextProvider>;
+  return (
+    <QuizContext.Provider value={ctxValue}>{children}</QuizContext.Provider>
+  );
 }
