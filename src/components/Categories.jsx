@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+
+import { QuizContext } from "../store/quiz-context";
 
 import Button from "./UI/Button";
 
@@ -14,14 +16,11 @@ const CATEGORIES = [
   { id: 31, name: "Japanese Anime & Manga" },
 ];
 
-export default function Categories({
-  playerName,
-  selectCategoryId,
-  playedCategories,
-  selectCategory,
-}) {
+export default function Categories() {
   const [categoryId, setCategoryId] = useState(null);
   const [categoryName, setCategoryName] = useState("");
+
+  const { quiz, player, selectCategoryId } = useContext(QuizContext);
 
   // choose category id and category name
   function handleSelectCategory(category) {
@@ -30,18 +29,17 @@ export default function Categories({
   }
 
   function handleStartGame() {
-    selectCategory(categoryId);
     selectCategoryId(categoryId);
   }
 
   return (
     <>
-      <p>Welcome, {playerName}!</p>
+      <p>Welcome, {player.playerName}!</p>
       <ul>
         {CATEGORIES.map(category => (
           <li key={category.id}>
             <Button
-              disabled={playedCategories.includes(category.id)}
+              disabled={quiz.playedCategoryIds.includes(category.id)}
               onClick={() => handleSelectCategory(category)}
             >
               {category.name}
