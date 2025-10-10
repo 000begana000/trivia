@@ -12,6 +12,7 @@ export default function Quiz() {
   const [isFetching, setIsFetching] = useState(false);
   const [quizItems, setQuizItems] = useState([]);
   const [error, setError] = useState();
+  const [playedCategories, setPlayedCategories] = useState([]);
 
   // fetch quiz items & start new game
   useEffect(() => {
@@ -43,6 +44,14 @@ export default function Quiz() {
     setCategoryId(selectedCategoryId);
   }
 
+  function handleSelectCategory(categoryId) {
+    setPlayedCategories(prevCategories =>
+      prevCategories.includes(categoryId)
+        ? prevCategories
+        : [...prevCategories, categoryId]
+    );
+  }
+
   function handleStartNewGame() {
     setCategoryId("");
   }
@@ -54,7 +63,9 @@ export default function Quiz() {
         <Categories
           key={categoryId}
           playerName={playerName}
-          selectCategory={handleSelectCategoryId}
+          selectCategoryId={handleSelectCategoryId}
+          playedCategories={playedCategories}
+          selectCategory={handleSelectCategory}
         />
       )}
       {categoryId && (
@@ -63,7 +74,9 @@ export default function Quiz() {
           quizItems={quizItems}
           isFetching={isFetching}
           onStartNewGame={handleStartNewGame}
-          selectCategory={handleSelectCategoryId}
+          selectCategoryId={handleSelectCategoryId}
+          playedCategories={playedCategories}
+          selectCategory={handleSelectCategory}
         />
       )}
     </>

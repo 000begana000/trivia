@@ -13,7 +13,9 @@ export default function Question({
   quizItems,
   isFetching,
   onStartNewGame,
+  selectCategoryId,
   selectCategory,
+  playedCategories,
 }) {
   const [answerState, setAnswerState] = useState("");
   const [userAnswers, setUserAnswers] = useState([]);
@@ -28,7 +30,7 @@ export default function Question({
     answerState === "" ? userAnswers.length : userAnswers.length - 1;
 
   // quiz is complete after 10 questions
-  const quizIsComplete = activeQuestionIndex === 10;
+  const quizIsComplete = activeQuestionIndex === 3;
 
   // decode HTML encoding
   const currentQuestion =
@@ -109,8 +111,10 @@ export default function Question({
     return (
       <Categories
         playerName={playerName}
+        selectCategoryId={selectCategoryId}
         selectCategory={selectCategory}
         playerLife={playerLife}
+        playedCategories={playedCategories}
       />
     );
   }

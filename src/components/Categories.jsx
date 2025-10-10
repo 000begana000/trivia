@@ -14,23 +14,24 @@ const CATEGORIES = [
   { id: 31, name: "Japanese Anime & Manga" },
 ];
 
-let playedCategories = [];
-
-let categoryId = {};
-
-export default function Categories({ playerName, selectCategory }) {
+export default function Categories({
+  playerName,
+  selectCategoryId,
+  playedCategories,
+  selectCategory,
+}) {
+  const [categoryId, setCategoryId] = useState(null);
   const [categoryName, setCategoryName] = useState("");
 
   // choose category id and category name
   function handleSelectCategory(category) {
-    categoryId = category.id;
+    setCategoryId(category.id);
     setCategoryName(category.name);
   }
 
   function handleStartGame() {
     selectCategory(categoryId);
-    playedCategories.push(categoryId);
-    console.log(playedCategories);
+    selectCategoryId(categoryId);
   }
 
   return (
@@ -39,7 +40,10 @@ export default function Categories({ playerName, selectCategory }) {
       <ul>
         {CATEGORIES.map(category => (
           <li key={category.id}>
-            <Button onClick={() => handleSelectCategory(category)}>
+            <Button
+              disabled={playedCategories.includes(category.id)}
+              onClick={() => handleSelectCategory(category)}
+            >
               {category.name}
             </Button>
           </li>
